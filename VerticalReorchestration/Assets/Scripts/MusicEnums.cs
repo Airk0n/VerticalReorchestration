@@ -14,7 +14,7 @@ public enum MusicBlockType
     none
 }
 
-public enum MusicStates
+public enum MusicState
 {
     Explicit,
     Climb,
@@ -22,5 +22,6 @@ public enum MusicStates
     Drift,
     None
 }
+
 
 

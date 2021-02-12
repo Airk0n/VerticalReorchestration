@@ -19,6 +19,61 @@ public class MusicEngine : MonoBehaviour
     public Source sourceWaiting = Source.Neither;
     public MusicBlockType EngineType;
 
+    public int beats;
+    public int sixteenths;
+    public int nextTriggerBeat;
+
+    public delegate void FlipSource();
+    public static event FlipSource onFlipSource;
+
+
+    private void OnEnable()
+    {
+        Metronome.Ticked += clickLogger;
+    }
+    
+    public void clickLogger(double nextClick)
+    {
+        if (!isPlaying) return;
+        CountTicks();
+        if(beats == nextTriggerBeat)
+        {
+            sources[flip].clip = clip;
+            sources[flip].PlayScheduled(nextClick);
+
+            //Debug.Log("Scheduled source " + flip + " to start at time " + nextEventTime);
+            beats = 0;
+            nextTriggerBeat = currentBlock.LoopLength;
+
+            flip = 1 - flip;
+
+            
+
+
+
+
+
+        }
+
+    }
+    
+
+    public void CountTicks()
+    {
+        if (sixteenths == 4)
+        {
+            sixteenths = 1;
+            beats++;
+
+
+        }
+        else
+        {
+            sixteenths++;
+        }
+
+    }
+
 
     [SerializeField] private MusicBlock currentBlock;
 
@@ -65,12 +120,22 @@ public class MusicEngine : MonoBehaviour
 
     public void Play()
     {
+        if (isPlaying) return;
+        if (engineStatus != Source.Neither) return;
+        beats = 0;
+        sixteenths = 0;
         isPlaying = true;
+
+        
     }
 
     public void StopAfterLoop()
     {
         isPlaying = false;
+        beats = 0;
+        sixteenths = 0;
+        nextTriggerBeat = 0;
+        
     }
 
     public void StopImediate()
@@ -80,10 +145,14 @@ public class MusicEngine : MonoBehaviour
         {
             sources[i].Stop();
         }
+        nextTriggerBeat = 0;
+        beats = 0;
+        sixteenths = 0;
     }
 
     public void Init(MusicManager manager, MusicBlockType type)
     {
+
         EngineType = type;
         nextEventTime = AudioSettings.dspTime + 2.0f;
 
@@ -113,6 +182,7 @@ public class MusicEngine : MonoBehaviour
 
     }
 
+
     private void Update()
     {
 
@@ -128,14 +198,7 @@ public class MusicEngine : MonoBehaviour
 
         if (time + 1.0f > nextEventTime)
         {
-            sources[flip].clip = clip;
-            sources[flip].PlayScheduled(nextEventTime);
 
-            //Debug.Log("Scheduled source " + flip + " to start at time " + nextEventTime);
-
-            nextEventTime += 60.0f / currentBlock.BPM * (currentBlock.LoopLengthInBeats * 4);
-
-            flip = 1 - flip;
         }
 
 
@@ -145,6 +208,7 @@ public class MusicEngine : MonoBehaviour
 
     public void StatusCheck()
     {
+        Source tempStatus = engineStatus;
         int howManyPlaying = 0;
         int whichOne = -1;
         for (int i = 0; i < sources.Length; i++)
@@ -164,19 +228,19 @@ public class MusicEngine : MonoBehaviour
         switch (engineStatus)
         {
             case Source.JustZero:
-                if(EngineType == MusicBlockType.intro || EngineType == MusicBlockType.outro)
+                if(currentBlock.type == MusicBlockType.outro)
                 {
                     isPlaying = false;
                 }
                 break;
             case Source.JustOne:
-                if (EngineType == MusicBlockType.intro || EngineType == MusicBlockType.outro)
+                if (currentBlock.type == MusicBlockType.outro)
                 {
                     isPlaying = false;
                 }
                 break;
             case Source.Both:
-                if (EngineType == MusicBlockType.intro || EngineType == MusicBlockType.outro)
+                if (currentBlock.type == MusicBlockType.outro)
                 {
                     isPlaying = false;
                 }
@@ -184,6 +248,8 @@ public class MusicEngine : MonoBehaviour
             case Source.Neither:
                 break;
         }
+
+        if (engineStatus != tempStatus) onFlipSource?.Invoke();
 
     }
 

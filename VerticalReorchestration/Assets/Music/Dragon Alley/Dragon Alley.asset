@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed5bb6b6b070488469fc4a046a43fc4f, type: 3}
+  m_Name: Dragon Alley
+  m_EditorClassIdentifier: 
+  TrackTitle: Dragon Alley
+  BPM: 170
+  intros:
+  - {fileID: 11400000, guid: a321c995d57133644a98aefe1c8e32c7, type: 2}
+  - {fileID: 11400000, guid: 37afd3621d5188d4fb2a123af09fb28d, type: 2}
+  - {fileID: 11400000, guid: a3ec98e1702b88949a166879e0fe9734, type: 2}
+  normals:
+  - {fileID: 11400000, guid: 2ee20add9f4945a4baf7fc768c158020, type: 2}
+  - {fileID: 11400000, guid: d45fca4fb93040648a160678c173f5aa, type: 2}
+  outros:
+  - {fileID: 11400000, guid: c84b1eb48394cd6429db4cc188a4119a, type: 2}

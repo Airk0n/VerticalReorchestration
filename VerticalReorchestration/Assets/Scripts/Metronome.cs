@@ -7,7 +7,7 @@ public class Metronome : MonoBehaviour
 {
 
 
-    public int subdivisions = 4;
+    private int subdivisions = 4;
     private double tempo;
     private bool isRunning;
 
@@ -23,13 +23,21 @@ public class Metronome : MonoBehaviour
     private void Awake()
     {
         Reset();
-        isRunning = true;
     }
 
-    public void SetTempo(double newTempo, int subs)
+    public void StartClicking()
+    {
+        isRunning = true;
+    }
+    public void StopClicking()
+    {
+        isRunning = false;
+    }
+
+    public void SetTempo(double newTempo)
     {
         tempo = newTempo;
-        subdivisions = subs;
+        subdivisions = 4;
         Reset();
     }
 

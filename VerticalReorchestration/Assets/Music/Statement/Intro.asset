@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clip: {fileID: 8300000, guid: 0744421720521b346a3df005f26d88f9, type: 3}
   BPM: 170
-  LoopLengthInBeats: 8
+  LoopLengthInBeats: 32
   type: 0
