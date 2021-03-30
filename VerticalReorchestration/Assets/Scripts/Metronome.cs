@@ -9,7 +9,7 @@ public class Metronome : MonoBehaviour
 
     private int subdivisions = 4;
     private double tempo;
-    private bool isRunning;
+    public bool isRunning { get; private set; }
 
     // the length of a single tick in seconds
     private double _tickLength;

@@ -748,7 +748,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 707203003}
-        m_MethodName: GiveNewBlock
+        m_MethodName: PlayOutro
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1107,7 +1107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Track: {fileID: 11400000, guid: 3c7a707dfc0fe89449163464ac9f81af, type: 2}
-  currentMode: 1
+  currentMode: 2
 --- !u!4 &707203004
 Transform:
   m_ObjectHideFlags: 0
@@ -2066,7 +2066,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 707203003}
-        m_MethodName: GiveNewBlock
+        m_MethodName: StopImediate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

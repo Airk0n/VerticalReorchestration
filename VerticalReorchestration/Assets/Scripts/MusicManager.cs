@@ -59,7 +59,7 @@ public class MusicManager : MonoBehaviour
                 break;
 
             case MusicState.Climb:
-                    if (currentIndex != Track.normals.Length-1)
+                    if (currentIndex != Track.normals.Length-1 && _queuedBlockType == MusicBlockType.none)
                     {
                         GiveNewBlock(MusicBlockType.normal, currentIndex + 1);
                     }
@@ -98,9 +98,8 @@ public class MusicManager : MonoBehaviour
         int currentIndex;
         BlockIndexes.TryGetValue(MusicBlockType.intro, out currentIndex);
         if (currentIndex != newIndex) BlockIndexes[MusicBlockType.intro] = newIndex;
-
+        _musicEngine.isPlaying = true;
         _musicEngine.NextBlock(Track.intros[newIndex]);
-        _musicEngine.Play();
 
         switch (currentMode)
         {
@@ -137,29 +136,32 @@ public class MusicManager : MonoBehaviour
 
 
     }
+    /// <summary>
+    /// Selects and Queues a random outro.
+    /// </summary>
+    public void PlayOutro()
+    {
+        if (Track.outros == null) return;
+        StartMetronome();
+        _musicEngine.isPlaying = true;
+
+        int newIndex = Random.Range(0, Track.outros.Length);
+        int currentIndex;
+        BlockIndexes.TryGetValue(MusicBlockType.outro, out currentIndex);
+        BlockIndexes[MusicBlockType.outro] = newIndex;
 
 
+        GiveNewBlock(MusicBlockType.outro, newIndex);
+
+
+
+
+    }
     public void QueueThisBlock(MusicBlockType musicType, int index)
     {
         _queuedBlockType = musicType;
         _queuedBlockIndex = index;
         BlockWaitingSinceBeat = _musicEngine.beats;
-    }
-    /// <summary>
-    /// Plays a specific Intro based on the index.
-    /// </summary>
-    /// <param name="index"></param>
-    public void PlayIntro(int index)
-    {
-        if (Track.intros == null) return;
-        if (index > Track.intros.Length - 1) return;
-
-        StartMetronome();
-
-        BlockIndexes[MusicBlockType.intro] = index;
-        _musicEngine.NextBlock(Track.intros[index]);
-        _musicEngine.Play();
-
     }
     /// <summary>
     /// All engines will stop playing audio after the current one has ended.
@@ -217,10 +219,23 @@ public class MusicManager : MonoBehaviour
 
     }
 
-    public void ChangeTension()
+    /// <summary>
+    /// Specify if you want the tension to rise, fall or the same by giving an integer(including negative values).
+    /// </summary>
+    /// <param name="direction">Change the index of loops by this number, up or down.</param>
+    public void ChangeTension(int direction)
     {
-        
+        int newIndex = BlockIndexes[MusicBlockType.normal] + direction;
+
+        if (newIndex > Track.normals.Length - 1) return;
+        if (newIndex < 0) return;
+
+
+        GiveNewBlock(MusicBlockType.normal, newIndex);
+
+
     }
+
 
     public void StartMetronome()
     {

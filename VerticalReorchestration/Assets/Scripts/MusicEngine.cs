@@ -26,6 +26,8 @@ public class MusicEngine : MonoBehaviour
     public delegate void FlipSource();
     public static event FlipSource onFlipSource;
 
+    [SerializeField] private MusicBlock currentBlock;
+
 
     private void OnEnable()
     {
@@ -47,12 +49,6 @@ public class MusicEngine : MonoBehaviour
 
             flip = 1 - flip;
 
-            
-
-
-
-
-
         }
 
     }
@@ -64,18 +60,15 @@ public class MusicEngine : MonoBehaviour
         {
             sixteenths = 1;
             beats++;
-
-
         }
         else
         {
             sixteenths++;
         }
-
     }
 
 
-    [SerializeField] private MusicBlock currentBlock;
+
 
     public void NextBlock(MusicBlock block)
     {
@@ -228,22 +221,19 @@ public class MusicEngine : MonoBehaviour
         switch (engineStatus)
         {
             case Source.JustZero:
-                if(currentBlock.type == MusicBlockType.outro)
+                if(currentBlock.type == MusicBlockType.outro && sourceWaiting == Source.Neither)
                 {
-                    isPlaying = false;
+                    StopAfterLoop();
                 }
                 break;
             case Source.JustOne:
-                if (currentBlock.type == MusicBlockType.outro)
+                if (currentBlock.type == MusicBlockType.outro && sourceWaiting == Source.Neither)
                 {
-                    isPlaying = false;
+                    StopAfterLoop();
+
                 }
                 break;
             case Source.Both:
-                if (currentBlock.type == MusicBlockType.outro)
-                {
-                    isPlaying = false;
-                }
                 break;
             case Source.Neither:
                 break;
